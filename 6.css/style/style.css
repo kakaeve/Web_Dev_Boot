@@ -1,0 +1,26 @@
+h1{
+    text-align: center;
+    text-decoration: #f51e3f underline wavy;
+    letter-spacing: 15px;
+    font-size: 80px;
+    /* font-family: Impact, serif; */
+    font-family: monospace;
+}
+h2{
+    color:#a4c8d6;
+    background-color: rgb(89,151,0);
+}
+button{
+    color: magenta;
+    background-color: blueviolet;
+}
+p{
+    text-align: right;
+    color: olive;
+    font-weight: bold;
+    line-height: 2;
+    
+}
+a{
+    text-decoration: none;
+}

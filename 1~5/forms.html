@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- You can use your own content, or use the following to help get started -->
+    <!--  just make sure to use the same number of data points -->
+    <form action="">
+      <label for="id">ID</label>
+      <input type="text" placeholder="username" id="id" />
+      <input type="range" />
+      <input type="color" />
+      <input type="month" />
+      <input type="text" />
+      <input type="checkbox" />
+    </form>
+    <label for="req">req</label>
+    <br />
+    <textarea name="req" id="req" cols="30" rows="10"></textarea>
+  </body>
+
+  <h2>유효성검사</h2>
+  <form action="/dummy">
+    <label for="first">성을 입력하세요.</label>
+    <input type="text" name="" first id="first" required />
+
+    <p>
+      <label for="username">이름을 입력하세요</label>
+      <input type="text" id="username" name="username" minlength="5" />
+    </p>
+    <p>
+      <input type="email" required />
+    </p>
+    <p>
+      <input type="url" />
+    </p>
+    <button>Submit</button>
+  </form>
+</html>
