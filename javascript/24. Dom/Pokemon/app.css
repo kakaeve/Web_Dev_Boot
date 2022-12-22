@@ -1,0 +1,7 @@
+.pocketmon{
+    display: inline-block;
+    text-align: center;
+}
+.pocketmon img{
+    display: block;
+}
