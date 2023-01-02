@@ -9,7 +9,19 @@ console.dir(app);
 // });
 
 app.get("/", (req, res) => {
-  res.send('<input type="text"/>');
+  res.send("<h1>안녕하세요!</h1>");
+});
+
+app.get("/r/:subreddit", (req, res) => {
+  const { subreddit } = req.params;
+  res.send(`<h1>Browsing the ${subreddit}</h1>`);
+});
+
+app.get("/r/:subreddit/:postId", (req, res) => {
+  console.log(req.params);
+  const { subreddit, postId } = req.params;
+  //res.send(`<h1>Browsing the ${subreddit}</h1>`);
+  res.send(`<h1>Viewing Post ID :  ${postId}</h1>`);
 });
 
 app.post("cats", (req, res) => {
@@ -25,6 +37,14 @@ app.get("/dogs", (req, res) => {
   console.log("dog");
   res.send("<h1>Woof</h1>");
 });
+app.get("/search", (req, res) => {
+  const { q } = req.query;
+  if (!q) {
+    res.send("찾을 수 없어요.");
+  }
+  res.send(`<h1> ${q}를 찾으셨나요?</h1>`);
+});
+
 app.get("*", (req, res) => {
   res.send(`I don't know`);
 });
