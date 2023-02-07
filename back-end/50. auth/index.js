@@ -1,28 +1,81 @@
+const express = require("express");
+const app = express();
+const User = require("./models/user");
+const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const session = require("express-session");
 
-// const hashPassword = async (pw) => {
-//   const salt = await bcrypt.genSalt(12);
-//   const hash = await bcrypt.hash(pw, salt);
-//   console.log(salt);
-//   console.log(hash);
-// };
+mongoose.set("strictQuery", false);
 
-const hashPassword = async (pw) => {
-  const hash = await bcrypt.hash(pw, 12);
-  console.log(hash);
-};
+mongoose
+  .connect("mongodb://localhost:27017/authDemo", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Database connected!!");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
-const login = async (pw, hashedPw) => {
-  const result = await bcrypt.compare(pw, hashedPw);
-  if (result) {
-    console.log("로그인 성공");
-  } else {
-    console.log("틀렸어요");
+app.set("view engine", "ejs");
+app.set("views", "views");
+
+app.use(express.urlencoded({ extended: true }));
+app.use(session({ secret: "notagoodsecret" }));
+
+const requireLogin = (req, res, next) => {
+  if (!req.session.user_id) {
+    return res.redirect("/login");
   }
+  next();
 };
 
-// hashPassword("monkey");
-login(
-  "monkey!",
-  "$2b$12$WxV3It3yAdHT57IA/DeMa.fiiOW96qs2yTCEke90SxNeSlhvVZjMK"
-);
+app.get("/", (req, res) => {
+  res.send("홈입니다.");
+});
+
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  const foundUser = await User.findAndValidate(username, password);
+  if (foundUser) {
+    req.session.user_id = foundUser._id;
+    res.send("환영합니다.");
+  } else {
+    res.send("다시 해보세요.");
+  }
+});
+
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+app.post("/register", async (req, res) => {
+  const { password, username } = req.body;
+  const hash = await bcrypt.hash(password, 12);
+  const user = new User({ username, password });
+  await user.save();
+  req.session.user_id = user._id;
+  res.redirect("/");
+});
+
+app.post("/logout", (req, res) => {
+  // req.session.user_id = null;
+  req.session.destroy();
+  res.redirect("/login");
+});
+
+app.get("/secret", requireLogin, (req, res) => {
+  res.render("secret");
+});
+
+app.get("/topsecret", requireLogin, (req, res) => {
+  res.send("일급기밀");
+});
+
+app.listen(3000, (req, res) => {});
